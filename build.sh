@@ -23,7 +23,7 @@ echo "  User: ${USERNAME}"
 echo "  Container UID: ${USER_ID}"
 echo "  Container GID: ${GROUP_ID}"
 
-podman build \
+sudo podman build \
     --build-arg USER_ID=${USER_ID} \
     --build-arg GROUP_ID=${GROUP_ID} \
     --build-arg USERNAME=${USERNAME} \
