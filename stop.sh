@@ -3,9 +3,9 @@
 
 CONTAINER_NAME="redhat-dev"
 
-if podman ps --format "{{.Names}}" | grep -q "^${CONTAINER_NAME}$"; then
+if sudo podman ps --format "{{.Names}}" | grep -q "^${CONTAINER_NAME}$"; then
     echo "Stopping container '${CONTAINER_NAME}'..."
-    podman stop ${CONTAINER_NAME}
+    sudo podman stop ${CONTAINER_NAME}
     echo "Container stopped. Run ./start.sh to restart it."
 else
     echo "Container '${CONTAINER_NAME}' is not running."

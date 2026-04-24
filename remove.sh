@@ -3,7 +3,7 @@
 
 CONTAINER_NAME="redhat-dev"
 
-if podman ps -a --format "{{.Names}}" | grep -q "^${CONTAINER_NAME}$"; then
+if sudo podman ps -a --format "{{.Names}}" | grep -q "^${CONTAINER_NAME}$"; then
     echo "Removing container '${CONTAINER_NAME}'..."
     sudo podman rm -f ${CONTAINER_NAME}
     echo "Container removed. The volume 'redhat-dev-home' is preserved."

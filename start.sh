@@ -1,9 +1,11 @@
 #!/bin/bash
-# Start or attach to the Red Hat development container
+# Start container using root podman (works around high UID namespace issues)
 
 CONTAINER_NAME="redhat-dev"
 IMAGE_NAME="redhat-dev:latest"
 USERNAME=$(id -un)
+USER_ID=$(id -u)
+GROUP_ID=$(id -g)
 
 # VDDK path (optional - mount only if exists)
 VDDK_MOUNT=""
@@ -13,29 +15,26 @@ if [ -d "${HOME}/vmware-vix-disklib" ]; then
 fi
 
 # Check if container already exists
-if podman ps -a --format "{{.Names}}" | grep -q "^${CONTAINER_NAME}$"; then
+if sudo podman ps -a --format "{{.Names}}" | grep -q "^${CONTAINER_NAME}$"; then
     echo "Container '${CONTAINER_NAME}' exists."
 
     # Check if it's running
-    if podman ps --format "{{.Names}}" | grep -q "^${CONTAINER_NAME}$"; then
+    if sudo podman ps --format "{{.Names}}" | grep -q "^${CONTAINER_NAME}$"; then
         echo "Container is already running. Attaching..."
-        podman exec -it ${CONTAINER_NAME} /bin/bash
+        sudo podman exec -it -u ${USERNAME} ${CONTAINER_NAME} /bin/bash
     else
         echo "Starting existing container..."
-        podman start ${CONTAINER_NAME}
-        podman exec -it ${CONTAINER_NAME} /bin/bash
+        sudo podman start ${CONTAINER_NAME}
+        sudo podman exec -it -u ${USERNAME} ${CONTAINER_NAME} /bin/bash
     fi
 else
-    echo "Creating and starting new container..."
-    # Use --group-add keep-groups to handle high GID ranges
-    podman run -it \
+    echo "Creating and starting new container (using root podman)..."
+    sudo podman run -it \
         --name ${CONTAINER_NAME} \
         --hostname redhat-dev \
-        --userns=keep-id:uid=1000,gid=1000 \
-        --group-add keep-groups \
         -v "${HOME}/.gitconfig:/home/${USERNAME}/.gitconfig:ro" \
         -v "${HOME}/.ssh:/home/${USERNAME}/.ssh:ro" \
-        -v "${HOME}/workspace:/workspace:z" \
+        -v "${HOME}/workspace:/workspace" \
         ${VDDK_MOUNT} \
         -v "redhat-dev-home:/home/${USERNAME}" \
         ${IMAGE_NAME} \
