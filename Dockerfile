@@ -1,7 +1,8 @@
 FROM fedora:43
 
 # Install Red Hat development tools
-RUN dnf install -y \
+# RUN dnf install -y \
+RUN echo "ip_resolve=4" >> /etc/dnf/dnf.conf && dnf install -y \
     # Brew/Koji tools (koji and fedpkg are in standard repos)
     koji fedpkg \
     # Build tools

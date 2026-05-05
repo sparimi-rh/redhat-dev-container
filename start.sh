@@ -7,6 +7,10 @@ USERNAME=$(id -un)
 USER_ID=$(id -u)
 GROUP_ID=$(id -g)
 
+# Workspace folder on host to mount onto mount point inside the container
+WSFOLDER_HOST=${HOME}/wsgit
+WSFOLDER_CONTAINER=/workspace
+
 # VDDK path (optional - mount only if exists)
 VDDK_MOUNT=""
 if [ -d "${HOME}/vmware-vix-disklib" ]; then
@@ -34,7 +38,7 @@ else
         --hostname redhat-dev \
         -v "${HOME}/.gitconfig:/home/${USERNAME}/.gitconfig:ro" \
         -v "${HOME}/.ssh:/home/${USERNAME}/.ssh:ro" \
-        -v "${HOME}/workspace:/workspace" \
+        -v "${WSFOLDER_HOST}:${WSFOLDER_CONTAINER}:z" \
         ${VDDK_MOUNT} \
         -v "redhat-dev-home:/home/${USERNAME}" \
         ${IMAGE_NAME} \
