@@ -21,6 +21,7 @@ RUN echo "ip_resolve=4" >> /etc/dnf/dnf.conf && dnf install -y \
     perf gdb-gdbserver systemtap \
     # Autotools for building from source
     autoconf automake libtool make gcc gcc-c++ \
+    gperf \
     # Git send-email
     git-email \
     && dnf clean all
@@ -92,6 +93,12 @@ RUN dnf install -y nbdkit-plugin-vddk 2>/dev/null || echo "nbdkit-plugin-vddk no
 RUN dnf install -y \
     po4a gettext-devel \
     pod2man pod2html \
+    && dnf clean all
+
+# Install XDR, json-c
+RUN dnf install -y \
+    libtirpc-devel rpcgen \
+    json-c-devel \
     && dnf clean all
 
 # Create workspace directory
