@@ -81,9 +81,15 @@ RUN dnf install -y \
 # Install virt-v2v specific dependencies
 RUN dnf install -y \
     libguestfs libguestfs-tools \
+    libguestfs-devel \
     nbdkit \
     libnbd \
+    libnbd-devel \
+    libosinfo \
+    libosinfo-devel \
+    ocaml-libnbd-devel \
     edk2-ovmf \
+    perl-IPC-Run3 \
     && dnf clean all
 
 # Install optional nbdkit plugins (may not be available in all repos)
