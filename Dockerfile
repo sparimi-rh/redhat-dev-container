@@ -60,6 +60,8 @@ RUN dnf install -y \
     # Other utilities
     file-devel genisoimage icoutils \
     libosinfo virt-install \
+    # provides libc_malloc_debug.so.0
+    glibc-utils \
     && dnf clean all
 
 # Install nbdkit build dependencies
@@ -88,6 +90,7 @@ RUN dnf install -y \
     libosinfo \
     libosinfo-devel \
     ocaml-libnbd-devel \
+    rpm-devel \
     edk2-ovmf \
     perl-IPC-Run3 \
     && dnf clean all

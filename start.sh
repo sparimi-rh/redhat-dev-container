@@ -29,11 +29,15 @@ if sudo podman ps -a --format "{{.Names}}" | grep -q "^${CONTAINER_NAME}$"; then
     else
         echo "Starting existing container..."
         sudo podman start ${CONTAINER_NAME}
-        sudo podman exec -it -u ${USERNAME} ${CONTAINER_NAME} /bin/bash
+        sudo podman exec -it \
+		-u ${USERNAME} ${CONTAINER_NAME} /bin/bash
     fi
 else
     echo "Creating and starting new container (using root podman)..."
-    sudo podman run -it \
+    sudo podman run \
+	--security-opt label=type:container_kvm_t \
+	--ulimit core=-1 \
+	--rm -it \
         --name ${CONTAINER_NAME} \
         --hostname redhat-dev \
         -v "${HOME}/.gitconfig:/home/${USERNAME}/.gitconfig:ro" \
