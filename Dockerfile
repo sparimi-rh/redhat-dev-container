@@ -96,7 +96,8 @@ RUN dnf install -y \
     && dnf clean all
 
 # Install optional nbdkit plugins (may not be available in all repos)
-RUN dnf install -y nbdkit-plugin-vddk 2>/dev/null || echo "nbdkit-plugin-vddk not available - VDDK plugin must be built from source"
+RUN dnf install -y nbdkit-vddk-plugin && \
+    dnf clean all
 
 # Install documentation tools
 RUN dnf install -y \
