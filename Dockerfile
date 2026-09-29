@@ -93,6 +93,7 @@ RUN dnf install -y \
     rpm-devel \
     edk2-ovmf \
     perl-IPC-Run3 \
+    augeas \
     && dnf clean all
 
 # Install optional nbdkit plugins (may not be available in all repos)
